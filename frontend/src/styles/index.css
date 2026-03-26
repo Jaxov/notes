@@ -1,0 +1,55 @@
+@import url("https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&display=swap");
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply font-sans;
+  }
+
+  :root {
+    --theme-bg: #f7f7f5;
+    --theme-surface: #ffffff;
+    --theme-panel: #f1f1ee;
+    --theme-border: #e3e3dd;
+    --theme-text: #1f1f1b;
+    --theme-text-muted: #6b6b63;
+    --theme-accent: #2f6f6c;
+    --theme-accent-strong: #255a58;
+  }
+
+  .theme-light {
+    --theme-bg: #f7f7f5;
+    --theme-surface: #ffffff;
+    --theme-panel: #f1f1ee;
+    --theme-border: #e3e3dd;
+    --theme-text: #1f1f1b;
+    --theme-text-muted: #6b6b63;
+    --theme-accent: #2f6f6c;
+    --theme-accent-strong: #255a58;
+  }
+
+  .theme-dark {
+    --theme-bg: #0f1010;
+    --theme-surface: #171818;
+    --theme-panel: #1e1f1f;
+    --theme-border: #2b2c2c;
+    --theme-text: #e7e7e0;
+    --theme-text-muted: #b0b0a8;
+    --theme-accent: #4fb7b0;
+    --theme-accent-strong: #2f8f89;
+  }
+
+  .theme-ink {
+    --theme-bg: #0b0c14;
+    --theme-surface: #111321;
+    --theme-panel: #161a2c;
+    --theme-border: #20243b;
+    --theme-text: #e8ebff;
+    --theme-text-muted: #b2b7d1;
+    --theme-accent: #7a8cff;
+    --theme-accent-strong: #5a6df0;
+  }
+}

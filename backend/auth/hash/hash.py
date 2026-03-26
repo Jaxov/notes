@@ -1,0 +1,7 @@
+from passlib.hash import bcrypt
+
+def encode_password(password: str) -> str:
+    return bcrypt.hash(password)
+
+def verify_password(password: str, hashed_password: str) -> bool:
+    return bcrypt.verify(password, hashed_password)

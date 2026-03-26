@@ -1,0 +1,36 @@
+version: "3.9"
+services:
+  backend:
+    build: 
+      context: ./backend   # Теперь корень сборки — сама папка backend
+      dockerfile: Dockerfile
+    env_file:
+      - ./backend/.env
+    container_name: notes-backend
+    ports:
+      - "8000:8000"
+    environment:
+      - DATABASE_URL=postgresql+asyncpg://postgres:postgres@db:5432/postgres
+    depends_on:
+      - db
+    volumes:
+      - ./backend:/app  # Чтобы локальные изменения сразу попадали в контейнер
+  frontend:
+    build: ./frontend
+    container_name: notes-frontend
+    ports:
+      - "3000:80"
+
+  db:
+    image: postgres:15
+    container_name: notes-db
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: postgres
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_data:

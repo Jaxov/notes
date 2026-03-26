@@ -1,135 +1,202 @@
-<!DOCTYPE html>
-<html lang="en">
+    <!DOCTYPE html>
+    <html lang="en">
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="./styles/style.css">
-    <title>Notes</title>
-
-
-</head>
-
-<body>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="./styles/style.css">
+        <title>Notes</title>
 
 
-    <div class="notes-page">
-        <div class="notes-page-container">
-            <h1>Мои заметки</h1>
-            <ul>
-                {% for note in notes %}
-                <li><strong>{{ note.title }}</strong>: {{ note.content }}</li>
-                <button onclick="deleteNote({{ note.id }})">Удалить</button>
-                <!-- <button>Редактировать</button> -->
+    </head>
 
-                <input type="text" id="title-{{ note.id }}" placeholder="New title">
-                <input type="text" id="content-{{ note.id }}" placeholder="New content">
-
-                <button onclick="editNote({{ note.id }})">Редактировать</button>
-                {% else %}
-                <li>Заметок пока нет</li>
-                {% endfor %}
+    <body>
 
 
+        <div class="notes-page">
+            <div class="notes-page-container">
+                <h1>Мои заметки</h1>
+                <ul>
+                    {% for note in notes %}
+                    <li><strong>{{ note.title }}</strong>: {{ note.content }}</li>
+                    <button onclick="deleteNote({{ note.id }})">Удалить</button>
+                    <!-- <button>Редактировать</button> -->
 
-            </ul>
+                    <input type="text" id="title-{{ note.id }}" placeholder="New title">
+                    <input type="text" id="content-{{ note.id }}" placeholder="New content">
+
+                    <button onclick="editNote({{ note.id }})">Редактировать</button>
+                    {% else %}
+                    <li>Заметок пока нет</li>
+                    {% endfor %}
 
 
-            <ul>
-                <input type="text" id="input1" placeholder="Title">
-                <input type="text" id="input2" placeholder="Content">
-                <button
-                    onclick="createNote(document.getElementById('input1').value,document.getElementById('input2').value)">Добавить</button>
-            </ul>
 
-            <ul>
-                <!-- <h1>Редактировать</h1>
-                    <input type="text" id="input1" placeholder="Title"> 
-                    <input type="text" id="input2" placeholder="Content">  -->
-            </ul>
+                </ul>
+
+
+                <ul>
+                    <input type="text" id="input1" placeholder="Title">
+                    <input type="text" id="input2" placeholder="Content">
+                    <button
+                        onclick="createNote(document.getElementById('input1').value,document.getElementById('input2').value)">Добавить</button>
+                </ul>
+
+                <ul>
+                    <!-- <h1>Редактировать</h1>
+                        <input type="text" id="input1" placeholder="Title"> 
+                        <input type="text" id="input2" placeholder="Content">  -->
+                </ul>
+            </div>
         </div>
-    </div>
 
-    <script>
-        function editNote(id) {
-            const newTitle = document.getElementById(`title-${id}`).value;
-            const newContent = document.getElementById(`content-${id}`).value;
+        <script>
+            function editNote(id) {
+                const newTitle = document.getElementById(`title-${id}`).value;
+                const newContent = document.getElementById(`content-${id}`).value;
 
-            fetch(`/notes/${id}`, {
-                method: `PUT`,
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify({ title: newTitle, content: newContent })
-            })
-                .then(response => {
-                    if (!response.ok) throw new Error("Ошибка редактирования");
-                    return response.json();
+                fetch(`/notes/${id}`, {
+                    method: `PUT`,
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({ title: newTitle, content: newContent })
                 })
-                .then(data => {
-                    console.log(data);
-                    location.reload();
+                    .then(response => {
+                        if (!response.ok) throw new Error("Ошибка редактирования");
+                        return response.json();
+                    })
+                    .then(data => {
+                        console.log(data);
+                        location.reload();
+                    })
+                    .catch(error => {
+                        console.error("Ошибка:", error);
+                    });
+            }
+        </script>
+
+
+        <script>
+            function createNote(title, content) {
+                // if (title.value == null || content.value == null) {
+                //     alert('Одно из полей не заполнено!');
+
+                //     event.preventDefault();
+                // }
+                fetch(`/notes/`, {
+                    method: `POST`,
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({ title, content })
                 })
-                .catch(error => {
-                    console.error("Ошибка:", error);
-                });
-        }
-    </script>
+                    .then(response => {
+                        if (!response.ok) throw new Erorr("Ошибка добавления");
+                        return response.json();
+                    })
+                    .then(data => {
+                        console.log(data);
+                        location.reload();
+                    })
+                // alert(title + content)
 
+            }
+        </script>
 
-    <script>
-        function createNote(title, content) {
-            // if (title.value == null || content.value == null) {
-            //     alert('Одно из полей не заполнено!');
-
-            //     event.preventDefault();
-            // }
-            fetch(`/notes`, {
-                method: `POST`,
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify({ title, content })
-            })
-                .then(response => {
-                    if (!response.ok) throw new Erorr("Ошибка добавления");
-                    return response.json();
+        <script>
+            function deleteNote(id) {
+                fetch(`/notes/${id}`, {
+                    method: `DELETE`
                 })
-                .then(data => {
-                    console.log(data);
-                    location.reload();
-                })
-            // alert(title + content)
-
-        }
-    </script>
-
-    <script>
-        function deleteNote(id) {
-            fetch(`/notes/${id}`, {
-                method: `DELETE`
-            })
-                .then(response => {
-                    if (!response.ok) throw new Error("Ошибка удаления");
-                    return response.json();
-                })
-                .then(data => {
-                    console.log(data);
-                    location.reload();  // Обновим страницу после удаления
-                })
-                .catch(error => {
-                    console.error("Ошибка:", error);
-                });
-        }
-    </script>
+                    .then(response => {
+                        if (!response.ok) throw new Error("Ошибка удаления");
+                        return response.json();
+                    })
+                    .then(data => {
+                        console.log(data);
+                        location.reload();  // Обновим страницу после удаления
+                    })
+                    .catch(error => {
+                        console.error("Ошибка:", error);
+                    });
+            }
+        </script>
 
 
-<div class="auth-form">
-    <div class="auth-form-container">
-        <input type="text" id>
-    </div>
-</div>
+        <div class="auth-form">
+            <div class="auth-form-container">
+                <div class="login-container">
+                    <input type="text" id="login" placeholder="login">
+                    <input type="text" id="password" placeholder="password">
+                    <button onclick="sendLogin()">login</button>
+                </div>
 
-</body>
+                <div class="register-container">
+                    <input type="text" id="login-reg" placeholder="login">
+                    <input type="text" id="password-reg" placeholder="password">
+                    <button onclick="sendRegister()">register</button>
+                </div>
+            </div>
 
-</html>
+            <script>
+                function sendRegister() {
+                    const login = document.getElementById("login-reg").value;
+                    const password = document.getElementById("password-reg").value;
+
+                    fetch(`/auth/register`, {
+                        method: `POST`,
+                        headers: {
+                            "Content-Type": "application/json"
+                        },
+                        body: JSON.stringify({ username: login, password: password })
+                    })
+                    
+                    .then(response => {
+                        if (!response.ok) throw new Error("Ошибка");
+                        return response.json();
+                    })
+                    .then(data => {
+                        console.log(data);
+                        // location.reload();
+                    })
+                    .catch(error => {
+                        console.error("Ошибка:", error);
+                    });
+                }
+            </script>
+
+            <script>
+                function sendLogin() {
+                    const login = document.getElementById("login").value;
+                    const password = document.getElementById("password").value;
+
+                    fetch(`http://localhost:8000/auth/register`, {
+                        method: `POST`,
+                        headers: {
+                            "Content-Type": "application/json"
+                        },
+                        body: JSON.stringify({ username: login, password: password })
+                    })
+                    
+                    .then(response => {
+                        if (!response.ok) throw new Error("Ошибка");
+                        return response.json();
+                    })
+                    .then(data => {
+                        console.log(data);
+                        // location.reload();
+                    })
+                    .catch(error => {
+                        console.error("Ошибка:", error);
+                    });
+
+                }
+            </script>
+        </div>
+
+
+
+    </body>
+
+    </html>

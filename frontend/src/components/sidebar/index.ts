@@ -1,0 +1,6 @@
+export { default as SidebarShell } from "./SidebarShell"
+export { default as SidebarHeader } from "./SidebarHeader"
+export { default as SidebarSection } from "./SidebarSection"
+export { default as SidebarItem } from "./SidebarItem"
+export { default as SidebarFooter } from "./SidebarFooter"
+export { sidebarGroups } from "./sidebarConfig"
